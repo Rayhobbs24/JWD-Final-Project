@@ -1,3 +1,19 @@
+const createTaskHtml = (name, description, assignedTo, dueDate, status) => {
+  const html = `
+    <li class="list-group-item">
+        <div class="d-flex w-100 mt-2 justify-content-between align-items-center">
+            <h5>${name}</h5>
+            <span class="badge badge-danger">${status}</span>
+        </div>
+        <div class="d-flex w-100 mb-3 justify-content-between">
+            <small>Assigned To: ${assignedTo}</small>
+            <small>Due: ${dueDate}</small>
+        </div>
+        <p>${description}</p>
+    </li>`;
+  return html;
+};
+
 class TaskManager {
   constructor(currentId = 0) {
     this.tasks = [];
@@ -15,27 +31,23 @@ class TaskManager {
     };
     this.tasks.push(task);
   }
+
+  render() {
+    let tasksHtmlList = [];
+    
+    this.tasks.forEach(task => {
+      const date = new Date(task.dueDate);
+      const formattedDate = date.toLocaleDateString();
+      const taskHtml = createTaskHtml(
+        task.name, 
+        task.description, 
+        task.assignedTo, 
+        formattedDate, 
+        task.status);
+      tasksHtmlList.push(taskHtml);
+    });
+
+    const tasksHtml = tasksHtmlList.join('\n');
+    document.getElementById("tasklist").innerHTML = tasksHtml;
+  }
 }
-const newManager = new TaskManager();
-
-const task1 = {
-  id: 1,
-  name: "Take out the trash",
-  description: "Take out the trash to the front of the house",
-  assignedTo: "Nick",
-  dueDate: "2022-09-15",
-  status: "TODO",
-};
-
-const task2 = {
-  id: 2,
-  name: "Cook Dinner",
-  description: "Prepare a healthy serving of pancakes for the family tonight",
-  assignedTo: "Nick",
-  dueDate: "2022-09-30",
-  status: "TODO",
-};
-
-newManager.addTask(task1);
-newManager.addTask(task2);
-console.log(newManager.tasks);

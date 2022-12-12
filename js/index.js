@@ -1,15 +1,4 @@
-const manager = new TaskManager();
-console.log(manager);
-
-const anotherManager = new TaskManager();
-anotherManager.addTask(
-  "Do laundry",
-  "Wash sheets only",
-  "Tom",
-  "2022-12-23",
-  "TODO"
-);
-console.log(anotherManager);
+const taskManager = new TaskManager();
 
 // Select the New Task Form
 const newTaskForm = document.querySelector("#newTaskForm");
@@ -31,11 +20,19 @@ newTaskForm.addEventListener("submit", (event) => {
   const description = newTaskDescription.value;
   const assignedTo = newTaskAssignedTo.value;
   const dueDate = newTaskDueDate.value;
+
   if (!validFormFieldInput(name)) {
     errorMessage.innerHTML = "Invalid name input";
     errorMessage.style.display = "block";
   } else {
     errorMessage.style.display = "none";
+    taskManager.addTask({
+      name,
+      description,
+      assignedTo,
+      dueDate
+    });
+    taskManager.render();
   }
 });
 
